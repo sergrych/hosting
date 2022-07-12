@@ -1830,6 +1830,7 @@ mkdir -p /var/lib/rspamd
 chown _rspamd: /var/lib/rspamd
 
 # mysql encryption
+echo mysql encryption;
 if [ ! -e /etc/mysql/encryption/keyfile.enc ]; then
 	mkdir -p /etc/mysql/encryption/
 	openssl rand -hex 128 > /etc/mysql/encryption/keyfile.key
@@ -1837,6 +1838,7 @@ if [ ! -e /etc/mysql/encryption/keyfile.enc ]; then
 fi
 
 # install php applications
+echo phpmyadmin;
 if [ ! -e /var/www/html/phpmyadmin ]; then
 	mkdir -p /var/www/html/phpmyadmin
 	cd /var/www/html/phpmyadmin
@@ -1844,12 +1846,12 @@ if [ ! -e /var/www/html/phpmyadmin ]; then
 	composer install --no-dev
 	yarn
 fi
+echo install adminer;
 if [ ! -e /var/www/html/adminer ]; then
-	mkdir -p /var/www/html/adminer
-	cd /var/www/html/adminer
-	git clone https://github.com/vrana/adminer/ .
-	git submodule update --init
+	cd /var/www/html/
+	git clone https://github.com/vrana/adminer/ && cd adminer/externals/ && git clone https://github.com/vrana/jush && git clone https://github.com/vrana/JsShrink && git submodule update --init
 fi
+echo install squirrelmail;
 if [ ! -e /var/www/html/squirrelmail ]; then
 	mkdir -p /var/www/html/squirrelmail
 	cd /var/www/html/squirrelmail
