@@ -1869,9 +1869,9 @@ if [ ! -e /var/www/html/squirrelmail ]; then
 fi
 
 #install last tor
-curl --socks5-hostname 127.0.0.1:9050 -sSL https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc > /etc/apt/trusted.gpg.d/torproject.gpg
-echo "deb tor://apow7mjfryruh65chtdydfmqfpj5btws7nbocgtaovhvezgccyjazpqd.onion/torproject.org/ `lsb_release -cs` main" >> /etc/apt/sources.list
-apt update && apt upgrade -y
+#curl --socks5-hostname 127.0.0.1:9050 -sSL https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc > /etc/apt/trusted.gpg.d/torproject.gpg
+#echo "deb tor://apow7mjfryruh65chtdydfmqfpj5btws7nbocgtaovhvezgccyjazpqd.onion/torproject.org/ `lsb_release -cs` main" >> /etc/apt/sources.list
+#apt update && apt upgrade -y
 
 cp -r /root/hosting/var /
 cp -r /root/hosting/usr /
