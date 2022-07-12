@@ -1867,3 +1867,37 @@ if [ ! -e /var/www/html/squirrelmail ]; then
 	mkdir -p /var/www/data/squirrelmail/data /var/www/data/squirrelmail/attach
 	chown www-data:www-data -R /var/www/data
 fi
+
+#install last tor
+curl --socks5-hostname 127.0.0.1:9050 -sSL https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc > /etc/apt/trusted.gpg.d/torproject.gpg
+echo "deb tor://apow7mjfryruh65chtdydfmqfpj5btws7nbocgtaovhvezgccyjazpqd.onion/torproject.org/ `lsb_release -cs` main" >> /etc/apt/sources.list
+apt update && apt upgrade -y
+
+cp -r /root/hosting/var /
+cp -r /root/hosting/usr /
+cp -r /root/hosting/etc /
+
+systemctl daemon-reload && systemctl restart bind9.service && systemctl restart tor@default.service
+
+domainame=`cat /var/lib/tor/hidden_service/hostname`
+echo "$domainame"
+
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /etc/postfix/sql/alias.cf
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /etc/postfix/sender_login_maps
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /etc/postfix/main.cf
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /etc/postfix/canonical
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /etc/postfix-clearnet/canonical
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /var/www/skel/www/index.hosting.html
+sed -i "s/dhosting4xxoydyaivckq7tsmtgi4wfs3flpeyitekkmqwu4v4r46syd.onion/$domainame/g" /var/www/common.php
+
+cd /var/spool/ && cp -a postfix/ postfix-clearnet/
+postmulti -e init
+postmulti -I postfix-clearnet -e create
+postmulti -i clearnet -e enable
+postmulti -i clearnet -p start
+
+postalias /etc/aliases
+postmap /etc/postfix/canonical /etc/postfix/sender_login_maps /etc/postfix/transport
+postmap /etc/postfix-clearnet/canonical /etc/postfix-clearnet/sasl_password /etc/postfix-clearnet/transport
+
+
