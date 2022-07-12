@@ -1852,6 +1852,7 @@ if [ ! -e /var/www/html/phpmyadmin ]; then
 	git clone -b STABLE https://github.com/phpmyadmin/phpmyadmin/ .
 	composer install --no-dev
 	yarn
+	cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
 fi
 echo install adminer;
 if [ ! -e /var/www/html/adminer ]; then
