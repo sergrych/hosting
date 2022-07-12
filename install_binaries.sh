@@ -18,7 +18,7 @@ export NVM_DIR="$HOME/.nvm"
 nvm install node
 
 #install yarn
-npm i -g yarn
+#npm i -g yarn
 
 # initial repository clones
 if [ ! -e libssh2 ]; then
@@ -1839,6 +1839,13 @@ fi
 
 # install php applications
 echo phpmyadmin;
+
+# install yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+apt update
+apt install yarn -y
+
 if [ ! -e /var/www/html/phpmyadmin ]; then
 	mkdir -p /var/www/html/phpmyadmin
 	cd /var/www/html/phpmyadmin
